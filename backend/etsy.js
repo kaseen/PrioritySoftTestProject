@@ -1,5 +1,3 @@
-const puppeteer = require('puppeteer');
-
 const getCategories = async (page) => {
     try {
         await page.waitForSelector('.shop-by-category-section');
@@ -62,24 +60,6 @@ const listProducts = async (page) => {
     }
 }
 
-(async () => {
-    // Launch the browser
-    const browser = await puppeteer.launch({ headless: false });
-    
-    // Create a page
-    const page = await browser.newPage();
-
-    const url = 'https://www.etsy.com/';
-
-    await navigatePageTo(page, url);
-
-    const categories = await getCategories(page);
-    await navigatePageTo(page, categories[0].categoryLink);
-
-    const products = await listProducts(page);
-
-    console.log(products)
-
-    // Close the browser
-    await browser.close();
-})();
+module.exports = {
+    getCategories, navigatePageTo, listProducts
+}
