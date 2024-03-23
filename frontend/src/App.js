@@ -5,7 +5,7 @@ import axios from 'axios';
 function App() {
 
     const [categories, setCategories] = useState([null]);
-    //const [categoryLink, setCategoryLink] = useState(null);
+    const [products, setProducts] = useState([null]);
 
     useEffect(() => {
         if(categories[0] === null){
@@ -22,17 +22,21 @@ function App() {
     const onCategoryClick = (categoryLink) => {
         axios.post('http://localhost:4000/products', { categoryLink })
         .then((res) => {
-            console.log(res.data);
+            setProducts(res.data);
         })
         .catch(_ => {
             console.log('Error fetching products');
         });
     }
 
+    const onProductClick = (productLink) => {
+        console.log(productLink);
+    }
+
     return (
         <div>
             <Categories categories={categories} onCategoryClick={onCategoryClick}/>
-            <Products/>
+            <Products products={products} onProductClick={onProductClick}/>
         </div>
     );
 }

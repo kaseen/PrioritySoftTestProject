@@ -3,9 +3,15 @@ import { Box } from '@mui/material';
 const style = {
     display: 'flex',
     flexDirection: 'row',
-    flexWrap: 'wrap',
-    border: '1px solid red'
+    flexWrap: 'wrap'
 }
+
+const displayBoxStyle = {
+    padding: '10px',
+    //border: '2px solid black',
+    width: '180px',
+    height: '180px'
+};
 
 export const Categories = ({ categories, onCategoryClick }) => {
     return (
@@ -13,7 +19,7 @@ export const Categories = ({ categories, onCategoryClick }) => {
         <Box sx={style}>
             {
                 categories.map((category, index) => (
-                    <Box key={index} sx={{ padding: '10px' }}>
+                    <Box key={index} sx={displayBoxStyle}>
                         <img
                             style={{ width: 180 }}
                             src={category.categoryImg}
@@ -32,10 +38,35 @@ export const Categories = ({ categories, onCategoryClick }) => {
     )
 }
 
-export const Products = () => {
+export const Products = ({ products, onProductClick }) => {
     return (
+        products[0] !== null ?
         <Box sx={style}>
-            PRODUCTS
+            {
+                products.map((product, index) => (
+                    <Box key={index} sx={{ ...displayBoxStyle, height: '250px' }}>
+                        <img
+                            style={{ width: 180 }}
+                            src={product.productImg}
+                            alt={index}
+                            onClick={() => onProductClick(product.productLink)}
+                        />
+                        <Box>
+                            {
+                                product.productName.length > 60 ?
+                                `${product.productName.substring(0, 60)}...`
+                                :
+                                product.productName
+                            }
+                        </Box>
+                        <Box sx={{ fontWeight: 'bold' }}>
+                            Price: {product.productPrice}
+                        </Box>
+                    </Box>
+                ))
+                }
         </Box>
+        :
+        <Box sx={style}></Box>
     )
 }
