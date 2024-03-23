@@ -1,16 +1,23 @@
+import { useEffect, useState } from 'react';
+import { Categories, Products } from './UI';
 import axios from 'axios';
 
 function App() {
 
-    const apiCall = () => {
-        axios.get('http://localhost:4000/categories').then((data) => {
-            console.log(data);
-        });
-    }
+    const [categories, setCategories] = useState([null]);
+
+    useEffect(() => {
+        if(categories[0] === null){
+            axios.get('http://localhost:4000/categories').then((res) => {
+                setCategories(res.data);
+            });
+        }
+    })
 
     return (
         <div>
-        <button onClick={apiCall}>Make API Call</button>
+            <Categories categories={categories}/>
+            <Products/>
         </div>
     );
 }
