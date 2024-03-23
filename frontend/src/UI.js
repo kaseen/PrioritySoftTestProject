@@ -7,7 +7,7 @@ const style = {
     border: '1px solid red'
 }
 
-export const Categories = ({ categories }) => {
+export const Categories = ({ categories, onCategoryClick }) => {
     return (
         categories[0] !== null ?
         <Box sx={style}>
@@ -18,7 +18,7 @@ export const Categories = ({ categories }) => {
                             style={{ width: 180 }}
                             src={category.categoryImg}
                             alt={index}
-                            onClick={() => console.log(category.categoryLink)}
+                            onClick={() => onCategoryClick(category.categoryLink)}
                         />
                         <Box>
                             {category.categoryText}
