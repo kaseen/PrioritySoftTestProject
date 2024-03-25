@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
-import { ScrapingBar, Categories, Products } from './UI';
+import { ScrapingBar, Categories, Products, Options } from './UI';
 import axios from 'axios';
 
 function App() {
 
     const [categories, setCategories] = useState([null]);
     const [products, setProducts] = useState([null]);
+    const [options, setOptions] = useState([null]);
     const [scraping, _setScraping] = useState({
         current: '',
         valid: true
@@ -53,7 +54,7 @@ function App() {
 
         axios.post('http://localhost:4000/options', { productUrl })
         .then((res) => {
-            console.log(res.data);
+            setOptions(res.data);
             setScraping('', false);
         })
         .catch(_ => {
@@ -66,6 +67,7 @@ function App() {
             <ScrapingBar scraping={scraping}/>
             <Categories categories={categories} onCategoryClick={onCategoryClick}/>
             <Products products={products} onProductClick={onProductClick}/>
+            <Options options={options}/>
         </div>
     );
 }

@@ -1,4 +1,4 @@
-import { Box, CircularProgress } from '@mui/material';
+import { Box, CircularProgress, Select, MenuItem } from '@mui/material';
 
 const style = {
     display: 'flex',
@@ -89,6 +89,26 @@ export const Products = ({ products, onProductClick }) => {
                     ))
                     }
             </Box>
+        </Box>
+    )
+}
+
+export const Options = ({ options }) => {
+    return (
+        options[0] === null ?
+        <Box></Box>
+        :
+        <Box>
+            {options.map((option, i) => (
+                <Box key={i} sx={{ padding: '10px' }}>
+                    <Box sx={{ fontSize: '18px', fontWeight: 'bold' }}>{option.name}</Box>
+                    <Select defaultValue="" sx={{ minWidth: 200 }}>
+                        {option.options.map((selector, j) => (
+                            <MenuItem key={j} value={selector} >{selector}</MenuItem>
+                        ))}
+                    </Select>
+                </Box>
+            ))}
         </Box>
     )
 }

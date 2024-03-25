@@ -64,8 +64,8 @@ const getProductOptions = async (page) => {
     const parseVariations = (input) => {           
         input = input.map(option => option.replace(/^\n\s*/g, ''));
         input = input.map(option => option.replace(/\n$/g, ''));
-        if(input[0] === 'Select an option')
-            input.shift();
+
+        input.shift();
 
         return input;
     }
@@ -106,7 +106,10 @@ const getProductOptions = async (page) => {
         );
 
         if(quantity.length !== 0)
-            variationsResult.push({ quantity: quantity });
+            variationsResult.push({
+                name: 'Quantity',
+                options: quantity
+            });
 
         return variationsResult;
     } catch (e) {
