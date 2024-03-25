@@ -48,8 +48,17 @@ function App() {
         });
     }
 
-    const onProductClick = (productLink) => {
-        console.log(productLink);
+    const onProductClick = (productUrl) => {
+        setScraping('options', true);
+
+        axios.post('http://localhost:4000/options', { productUrl })
+        .then((res) => {
+            console.log(res.data);
+            setScraping('', false);
+        })
+        .catch(_ => {
+            console.log('Error fetching options');
+        });
     }
 
     return (

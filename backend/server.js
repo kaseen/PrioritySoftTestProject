@@ -2,7 +2,7 @@ const puppeteer = require('puppeteer');
 const express = require('express');
 const cors = require('cors');
 
-const { getCategories, navigatePageTo, listProducts } = require('./etsy');
+const { getCategories, navigatePageTo, listProducts, getProductOptions } = require('./etsy');
 
 const app = express();
 
@@ -30,6 +30,18 @@ app.post('/products', async (req, res) => {
     const products = await listProducts(page);
 
     res.send(JSON.stringify(products));
+
+    await browser.close();
+});
+
+app.post('/options', async (req, res) => {
+    const browser = await puppeteer.launch({ headless: false });
+    const page = await browser.newPage();
+
+    await navigatePageTo(page, req.body.productUrl);
+    const options = await getProductOptions(page);
+
+    res.send(JSON.stringify(options));
 
     await browser.close();
 });

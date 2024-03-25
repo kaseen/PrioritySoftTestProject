@@ -56,10 +56,69 @@ const listProducts = async (page) => {
     } catch (e) {
         console.log(e);
         console.log('Error in listProducts');
-        return []
+        return [];
+    }
+}
+
+const getProductOptions = async (page) => {
+    const parseVariations = (input) => {           
+        input = input.map(option => option.replace(/^\n\s*/g, ''));
+        input = input.map(option => option.replace(/\n$/g, ''));
+        if(input[0] === 'Select an option')
+            input.shift();
+
+        return input;
+    }
+
+    const queryMain = '#content #listing-page-cart [data-buy-box] ';
+    const queryQuantity = queryMain + '[data-selector="listing-page-quantity"] option';
+
+    try {
+        let i = 0;
+        const variationsResult = [];
+        while(true) {
+            let queryVariationName = queryMain + `[data-selector="listing-page-variations"] #label-variation-selector-${i} span`;
+            let queryVariationsOptions = queryMain + `[data-selector="listing-page-variations"] #variation-selector-${i} option`;
+
+            console.log(`> Scraping ${queryVariationsOptions}`);
+            const variationOptions = await page.evaluate(
+                (queryVariationsOptions) => Array.from(document.querySelectorAll(queryVariationsOptions), (e) => e.innerText), queryVariationsOptions
+            );
+
+            if(variationOptions.length === 0)
+                break;
+
+            console.log(`> Scraping ${queryVariationName}`);
+            const variationName = await page.evaluate(
+                (queryVariationName) => Array.from(document.querySelectorAll(queryVariationName), (e) => e.innerText), queryVariationName
+            );
+
+            variationsResult.push({
+                name: variationName[0],
+                options: parseVariations(variationOptions)
+            });
+
+            i++;
+        }
+
+        const quantity = await page.evaluate(
+            (queryQuantity) => Array.from(document.querySelectorAll(queryQuantity), (e) => e.value), queryQuantity
+        );
+
+        if(quantity.length !== 0)
+            variationsResult.push({ quantity: quantity });
+
+        return variationsResult;
+    } catch (e) {
+        console.log(e);
+        console.log('Error in getProductInfo');
+        return [];
     }
 }
 
 module.exports = {
-    getCategories, navigatePageTo, listProducts
+    getCategories,
+    navigatePageTo,
+    listProducts,
+    getProductOptions
 }
